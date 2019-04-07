@@ -1,0 +1,7 @@
+---
+# defaults file for configure_nexus
+nexus_user: nexus
+nexus_group: nexus
+nexus_uid: 1003
+nexus_gid: 1003
+nexus_version: "3.15.2-01"

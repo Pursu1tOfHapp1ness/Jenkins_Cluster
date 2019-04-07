@@ -1,0 +1,26 @@
+---
+- name: Configure SonarQube .properties file
+  template:
+    src: sonar.properties.j2
+    dest: /opt/sonarqube-6.7.6/conf/sonar.properties
+    owner: "{{ sonar_user }}"
+    group: "{{ sonar_group }}"
+  become: yes
+  listen: sonarqube_tune
+
+- name: Configure SonarQube .service file
+  template:
+    src: sonar.service.j2
+    dest: /etc/systemd/system/sonar.service
+    owner: "{{ sonar_user }}"
+    group: "{{ sonar_group }}"
+  become: yes
+  listen: sonarqube_tune
+
+- name: Start SonarQube
+  systemd:
+    state: started
+    enabled: yes
+    name: sonar
+  become: yes
+  listen: sonarqube_tune

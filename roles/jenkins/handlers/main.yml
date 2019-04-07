@@ -1,0 +1,18 @@
+---
+# handlers file for configure_jenkins
+- name: Copy jenkins.service to systemd
+  template: 
+    src: jenkins.service.j2
+    dest: /etc/systemd/system/jenkins.service
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+  become: yes
+  listen: jenkins_tune
+
+
+- name: Enable and Start jenkins.service
+  service:
+    name: jenkins
+    enabled: yes
+    state: started
+  listen: jenkins_tune

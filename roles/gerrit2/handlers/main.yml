@@ -1,0 +1,38 @@
+---
+# handlers file for gerrit2
+- name: Start gerrit.war
+  shell: java -jar /opt/gerrit-2.16.7.war init --batch --no-auto-start -d /opt/gerrit/
+  listen: gerrit_tune
+
+- name: Add custom file gerrit.config
+  template:
+    src: gerrit.config.j2
+    dest: /opt/gerrit/etc/gerrit.config
+    owner: "{{ gerrit2_user }}"
+    group: "{{ gerrit2_group }}"
+  become: yes
+  listen: gerrit_tune
+
+- name: Add custom file secure.config
+  template:
+    src: secure.config.j2
+    dest: /opt/gerrit/etc/secure.config
+    owner: "{{ gerrit2_user }}"
+    group: "{{ gerrit2_group }}"
+  become: yes
+  listen: gerrit_tune
+
+- name: Set permissions on all repo to {{ gerrit_user }}
+  file:
+    path: /opt/gerrit
+    owner: "{{ gerrit2_user }}"
+    group: "{{ gerrit_group }}"
+    recurse: yes
+    state: directory
+  become: yes
+  listen: gerrit_tune
+
+- name: Reindex gerrit
+  shell: java -jar /opt/gerrit-2.16.7.war reindex -d /opt/gerrit
+  listen: gerrit_tune
+

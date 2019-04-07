@@ -1,0 +1,28 @@
+[gerrit]
+        basePath = git
+        serverId = 2963082d-609c-41e9-be59-b025fc848f5f
+        canonicalWebUrl = http://slave-node-3:8080/
+[database]
+        type = postgresql
+        hostname = localhost
+        database = {{ databasename_gerrit2 }}
+        username = {{ gerrit2_user }}
+[container]
+        javaOptions = "-Dflogger.backend_factory=com.google.common.flogger.backend.log4j.Log4jBackendFactory#getInstance"
+        javaOptions = "-Dflogger.logging_context=com.google.gerrit.server.logging.LoggingContext#getInstance"
+        user = root
+        javaHome = /usr/java/jdk1.8.0_131/jre
+[index]
+        type = LUCENE
+[auth]
+        type = OPENID
+[receive]
+        enableSignedPush = false
+[sendemail]
+        smtpServer = localhost
+[sshd]
+        listenAddress = *:29418
+[httpd]
+        listenUrl = http://*:8080/
+[cache]
+        directory = cache

@@ -1,0 +1,9 @@
+---
+# defaults file for install_services
+packages:
+  - git
+  - net-tools
+  - jq
+  - unzip
+  - tar
+  - wget 

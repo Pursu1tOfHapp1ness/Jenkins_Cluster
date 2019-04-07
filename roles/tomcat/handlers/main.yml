@@ -1,0 +1,48 @@
+---
+# handlers file for configure_tomcat
+- name: Create symbolic link
+  file: 
+    src: /opt/apache-tomcat-{{ tomcat_version }}
+    dest: /opt/tomcat
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    state: link
+  listen: tomcat_tune
+
+
+- name: Give {{ tomcat_user }} permissions for tomcat repo
+  file:
+    path: /opt/tomcat
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    recurse: yes
+    state: directory
+  become: yes
+  listen: tomcat_tune
+  
+
+- name: Give *.sh in ../bin +x
+  file:
+    dest: /opt/tomcat/bin/
+    mode: 0755
+    recurse: yes
+  listen: tomcat_tune
+ 
+
+- name: Create custom tomcat.service
+  template:
+    src: tomcat.service.j2
+    dest: /etc/systemd/system/tomcat.service
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_user }}"
+  become: yes
+  listen: tomcat_tune
+
+
+- name: Enable and start tomcat.service
+  service:
+    name: tomcat
+    enabled: yes
+    state: started
+  become: yes
+  listen: tomcat_tune

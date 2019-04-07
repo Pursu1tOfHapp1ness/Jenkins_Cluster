@@ -1,0 +1,31 @@
+---
+# tasks file for configure_tomcat
+- name: Check tomcat repo
+  stat:
+    path: /opt/tomcat
+  register: tomcat_ex
+
+- name: Download & Unzip tomcat
+  unarchive:
+    src: http://ftp.byfly.by/pub/apache.org/tomcat/tomcat-9/v9.0.17/bin/apache-tomcat-9.0.17.zip
+    dest: /opt/
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    remote_src: yes
+  when: tomcat_ex.stat.exists == false
+  notify: tomcat_tune
+
+# - name: Unarchive artifact
+#   unarchive:
+#     src: http://nexus-ci.playpit.by/repository/MNT-pipeline-training/psauchanka/pipeline-psauchanka/184/pipeline-psauchanka-184.tar.gz
+#     dest: /opt/tomcat/
+#     remote_src: yes
+
+# - name: Deploying artifact
+#   shell: |
+#     curl -T '/opt/tomcat/helloworld-ws/target/helloworld-ws.war' \
+#     'http://tomcat:tomcat@tomcat/manager/text/deploy?path=/psauchanka&update=true'
+
+# - name: Healthcheck application
+#   uri:
+#     url: http://tomcat/psauchanka

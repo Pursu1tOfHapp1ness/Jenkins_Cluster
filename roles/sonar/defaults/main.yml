@@ -1,0 +1,6 @@
+---
+# defaults file for configure_sonarqube
+sonar_user: sonar
+sonar_group: sonar
+sonar_uid: 1002
+sonar_gid: 1002

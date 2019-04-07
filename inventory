@@ -1,0 +1,26 @@
+[jenkins-master]
+192.168.56.24
+
+[jenkins-slave1]
+192.168.56.25
+
+[jenkins-slave2]
+192.168.56.26
+
+[jenkins-slave3]
+192.168.56.28
+
+[appl-server]
+192.168.56.27
+
+[nodes:children]
+jenkins-master
+jenkins-slave1
+jenkins-slave2
+jenkins-slave3
+appl-server
+
+[nodes:vars]
+ansible_user = root
+ansible_ssh_pass = vagrant
+ansible_connection = paramiko

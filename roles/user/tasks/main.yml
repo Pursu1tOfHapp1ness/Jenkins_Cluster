@@ -1,0 +1,22 @@
+---
+# tasks file for create_user
+- name: Create group - {{ groupname }}
+  group:
+    name: "{{ groupname }}"
+    gid: "{{ gid }}"
+    state: present
+
+- name: Create user - {{ username }}
+  user:
+    name: "{{ username }}"
+    group: "{{ groupname }}"
+    uid: "{{ uid }}"
+    password: "{{ password }}"
+    state: present
+    update_password: on_create
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: "{{ username }}"
+    state: present
+    key: "{{ lookup('file', './pem_files/{{ username }}.pem') }}"

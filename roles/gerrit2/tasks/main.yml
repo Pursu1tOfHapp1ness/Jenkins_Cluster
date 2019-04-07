@@ -1,0 +1,30 @@
+---
+# tasks file for gerrit2
+- name: Check if gerrit is running
+  uri:
+    url: "http://127.0.0.1:8080/"
+    status_code: 200
+    timeout: 3
+  register: gerrit_run
+  until: result.status == 200
+  retries: 10
+  delay: 1
+  changed_when: no
+  become: yes
+  ignore_errors: yes
+
+- name: Check if gerrit exists
+  stat:
+    path: /opt/gerrit/
+  when: gerrit_run is defined
+  register: gerrit_ex
+
+- name: Download gerrit.war
+  get_url:
+    dest: /opt/
+    owner: "{{ gerrit2_user }}"
+    group: "{{ gerrit2_group }}"
+    url: https://gerrit-releases.storage.googleapis.com/gerrit-2.16.7.war
+  notify: gerrit_tune
+  when: gerrit_ex.stat.exists == false
+

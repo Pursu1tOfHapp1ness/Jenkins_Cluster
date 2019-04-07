@@ -1,0 +1,29 @@
+# - hosts: jenkins-master
+#   become: yes
+#   roles:
+#     - jenkins
+
+# - hosts: appl-server
+#   become: yes
+#   roles:
+#     - tomcat
+
+# - hosts: jenkins-slave2
+#   become: yes
+#   roles:
+#     - nexus
+
+# - hosts: jenkins-slave1
+#   become: yes
+#   roles:
+#     - sonar
+
+- hosts: jenkins-slave3
+  become: yes
+  roles:
+    - gerrit2
+
+
+  
+
+

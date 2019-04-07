@@ -1,0 +1,10 @@
+---
+# tasks file for postgresql
+- name: Install PostgreSQL components
+  yum:
+    name:
+      - postgresql-server
+      - postgresql-contrib
+    state: present
+  become: yes
+  notify: postgresql_tune

@@ -1,0 +1,16 @@
+---
+# tasks file for configure_nexus
+- name: Check if Nexus repo exists
+  stat:
+    path: /opt/nexus
+  register: nexus_ex
+
+- name: Download Nexus
+  unarchive:
+    src: http://download.sonatype.com/nexus/3/latest-unix.tar.gz
+    dest: /opt
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+    remote_src: yes
+  when: nexus_ex.stat.exists == false
+  notify: nexus_tune

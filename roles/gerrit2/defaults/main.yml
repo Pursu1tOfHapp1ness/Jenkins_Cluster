@@ -1,0 +1,8 @@
+---
+# defaults file for gerrit2
+gerrit2_user: gerrit2
+gerrit2_group: gerrit2
+gerrit2_uid: 1005
+gerrit2_gid: 1005
+postgresqlpass_gerrit2: gerrit2
+databasename_gerrit2: gerrit2

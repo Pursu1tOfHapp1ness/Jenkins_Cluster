@@ -1,0 +1,28 @@
+---
+# handlers file for configure_nginx
+- name: Copy custom nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: "{{ username }}"
+    group: "{{ groupname }}"
+  listen: nginx_tune
+
+- name: Delete default nginx.conf
+  file:
+    path: /etc/nginx/nginx.conf.default
+    state: absent
+  become: yes
+  listen: nginx_tune
+
+- name: Make some magic
+  shell: /usr/sbin/nginx
+  listen: nginx_tune
+
+- name: Check, if it is okey
+  shell: nginx -t
+  listen: nginx_tune
+
+- name: Reload nginx to accept changes
+  shell: nginx -s reload
+  listen: nginx_tune

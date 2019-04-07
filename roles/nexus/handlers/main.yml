@@ -1,0 +1,53 @@
+---
+# handlers file for configure_nexus
+- name: Create symbolic link
+  file: 
+    src: /opt/nexus-{{ nexus_version }}
+    dest: /opt/nexus
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+    state: link
+  listen: nexus_tune
+
+- name: Give {{ nexus_user }} permissions for nexus repo
+  shell: chown -R {{ nexus_user }}:{{ nexus_group }} /opt/nexus
+  listen: nexus_tune
+
+- name: Give {{ nexus_user }} permissions for sonatype-work repo
+  shell: chown -R {{ nexus_user }}:{{ nexus_group }} /opt/sonatype-work
+  listen: nexus_tune
+
+- name: Custom nexus.rc file
+  template:
+    src: ./roles/nexus/templates/nexus.rc.j2
+    dest: /opt/nexus/bin/nexus.rc
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+  listen: nexus_tune
+
+- name: Create nexus link for init.d
+  file: 
+    src: /opt/nexus/bin/nexus
+    dest: /etc/init.d/nexus
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+    state: link
+  become: yes
+  listen: nexus_tune
+
+- name: Create nexus link for init.d
+  file: 
+    src: /opt/nexus/bin/nexus
+    dest: /etc/init.d/nexus
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+    state: link
+  become: yes
+  listen: nexus_tune
+
+- name: Start and enable nexus
+  systemd:
+    state: started
+    enabled: yes
+    name: nexus
+  listen: nexus_tune

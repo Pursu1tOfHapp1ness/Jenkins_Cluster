@@ -1,0 +1,32 @@
+- name: Check for installation Sonar Scanner
+  stat:
+    path: /opt/sonar-scanner-cli-3.3.0.1492-linux
+  register: sonar_scanner_check
+
+- name: Download & Unzip Sonar Scanner
+  unarchive:
+    src: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
+    dest: /opt/
+    owner: "{{ sonar_user }}"
+    group: "{{ sonar_group }}"
+    remote_src: yes
+  when: sonar_scanner_check.stat.exists == false
+
+- name: Check for installation SonarQube
+  stat:
+    path: /opt/sonarqube-6.7.6
+  register: sonarqube_check
+
+- name: Download SonarQube
+  unarchive:
+    src: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-6.7.6.zip
+    dest: /opt/
+    owner: "{{ sonar_user }}"
+    group: "{{ sonar_group }}"
+    remote_src: yes
+  when: sonarqube_check.stat.exists == false
+  notify: sonarqube_tune
+
+
+
+

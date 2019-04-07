@@ -1,0 +1,6 @@
+---
+# defaults file for configure_jenkins
+jenkins_user: jenkins
+jenkins_group: jenkins
+jenkins_uid: 1004
+jenkins_gid: 1004

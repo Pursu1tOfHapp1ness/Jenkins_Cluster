@@ -1,0 +1,27 @@
+---
+# tasks file for install_services
+- name: Install needed packages
+  yum:
+    name: "{{ packages }}" 
+    state: latest
+
+- name: Download JAVA JDK
+  shell: |
+    wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm"
+  
+- name: Install JAVA JDK
+  yum:
+    name:
+     - jdk-8u131-linux-x64.rpm
+
+# - name: Install maven
+#   get_url:
+#     dest: /opt/
+#     url: http://ftp.byfly.by/pub/apache.org/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip
+
+# - name: Unzip maven
+#   unarchive:
+#     src: /opt/apache-maven-3.6.0-bin.zip
+#     dest: /opt/
+#     remote_src: yes
+

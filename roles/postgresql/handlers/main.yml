@@ -1,0 +1,42 @@
+---
+- name: Initialization PostgreSQL
+  shell: |
+    postgresql-setup initdb
+  listen: postgresql_tune
+
+- name: Copy pg_hba.conf
+  copy:
+    src: pg_hba.conf
+    dest: /var/lib/pgsql/data
+  listen: postgresql_tune
+
+- name: Start PostgreSQL
+  systemd:
+    enabled: yes
+    state: started
+    name: postgresql
+  listen: postgresql_tune
+
+- name: Configure PostgreSQL
+  shell: |
+    psql  -c "create user {{ username }}"
+    psql  -c "alter role {{ username }} with createdb"
+    psql  -c "alter user {{ username }} with encrypted password '{{ password }}'"
+    psql  -c "create database {{ databasename }} owner {{ username }}"
+    psql  -c "grant all privileges on database {{ databasename }} to {{ username }}"
+  become: yes
+  become_user: postgres
+  listen: postgresql_tune
+
+- name: Restart PostgreSQL
+  systemd:
+    name: postgresql
+    state: restarted
+  listen: postgresql_tune
+
+- name: Wait for port 5432 to become open on the host, don't start checking for 5 seconds
+  wait_for:
+    port: 5432
+    delay: 5
+    timeout: 10
+  listen: postgresql_tune
